@@ -225,7 +225,7 @@ declare -A GIT_CRATES=(
 
 inherit cargo systemd
 
-DESCRIPTION="system76-power"
+DESCRIPTION="System76 power management daemon"
 # Double check the homepage as the cargo_metadata crate
 # does not provide this value so instead repository is used
 HOMEPAGE="https://github.com/pop-os/system76-power"
