@@ -26,6 +26,6 @@ src_unpack() {
 }
 
 src_install() {
-	dodir "/opt/nec"
-	eval mv -i "${S}${VE_PREFIX}" "${D}/opt/nec" || die
+	dodir "/opt"
+	eval mv -i "${S}${VE_PREFIX}" "${D}/opt" || die
 }
