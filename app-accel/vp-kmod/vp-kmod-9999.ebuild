@@ -25,9 +25,9 @@ src_prepare() {
 
 src_configure() {
 	local myconf=(
-		--prefix="${EPREFIX}${VE_PREFIX}"
-		--enable-static=no
+		--prefix="${VE_PREFIX}"
 		--includedir="${EPREFIX}/usr/include"
+		--with-release-id=1
 	)
 
 	econf "${myconf[@]}"

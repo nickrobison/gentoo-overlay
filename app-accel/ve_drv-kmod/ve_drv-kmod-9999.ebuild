@@ -11,7 +11,7 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
 
-DEPEND=""
+DEPEND="app-accel/vp-kmod"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
@@ -19,18 +19,11 @@ VE_PREFIX="/opt/nec/ve/veos"
 
 src_prepare() {
 	default
-
 	eautoreconf
 }
 
 src_configure() {
-	local myconf=(
-#		--prefix="${EPREFIX}${VE_PREFIX}"
-		--enable-static=no
-#		--includedir="${EPREFIX}/usr/include"
-	)
-
-	econf "${myconf[@]}"
+	default
 }
 
 src_compile() {
@@ -40,7 +33,6 @@ src_compile() {
 src_install() {
 	emake "${MODULES_MAKEARGS[@]}" DESTDIR="${ED}" install
 	modules_post_process
-
 }
 
 pkg_postinst() {
