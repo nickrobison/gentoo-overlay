@@ -9,11 +9,9 @@ egit_repo_uri="https://github.com/veos-sxarr-nec/velayout.git"
 
 license="gpl-2"
 slot="0"
-keywords="~amd64"
 
 depend="dev-libs/log4c"
 rdepend="${depend}"
-bdepend=""
 
 ve_prefix="/opt/nec/ve/veos"
 
