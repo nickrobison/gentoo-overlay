@@ -1,0 +1,49 @@
+--- a/src/main.c
++++ b/src/main.c
+@@ -116,14 +116,14 @@
+  * @brief Probe VE architecture model/type
+  *
+  */
+-const struct ve_arch_class *ve_drv_probe_arch_class(struct ve_dev *vedev)
++static const struct ve_arch_class *ve_drv_probe_arch_class(struct ve_dev *vedev)
+ {
+ 	const struct ve_arch_class *ret;
+ 	struct pci_dev *pdev = vedev->pdev;
+ 	ve_arch_probe_func_t **p;
+ 	for (p = ve_arch_probe_table; *p; ++p) {
+ 		ret = (**p)(vedev);
+-		if (ret > 0) {
++		if (ret) {
+ 			pdev_dbg(pdev, "probe succeeded (%s)\n",
+ 				ret->name);
+ 			return ret;
+@@ -144,12 +144,16 @@
+  * @return always 0
+  */
+ 
+-#if RHEL_RELEASE_VERSION(RHEL_MAJOR, RHEL_MINOR) > RHEL_RELEASE_VERSION(8, 8)
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
+-static int ve_dev_uevent(RH_KABI_CONST struct device *dev, struct kobj_uevent_env *env)
++#if defined(RHEL_RELEASE_VERSION)
++/* RHEL 8.8 backported the const dev argument of class->dev_uevent */
++#define VE_HAVE_CONST_DEV_UEVENT \
++	(RHEL_RELEASE_VERSION(RHEL_MAJOR, RHEL_MINOR) > RHEL_RELEASE_VERSION(8, 8))
+ #else
+-static int ve_dev_uevent(const struct device *dev, struct kobj_uevent_env *env)
++#define VE_HAVE_CONST_DEV_UEVENT \
++	(KERNEL_VERSION(6, 4, 0) <= LINUX_VERSION_CODE)
+ #endif
++#if VE_HAVE_CONST_DEV_UEVENT
++static int ve_dev_uevent(const struct device *dev, struct kobj_uevent_env *env)
+ #else
+ static int ve_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
+ #endif
+@@ -910,7 +914,7 @@
+ }
+ 
+ 
+-int ve_prepare_for_link_down(struct ve_dev *vedev, u16 *aer_cap,
++static int ve_prepare_for_link_down(struct ve_dev *vedev, u16 *aer_cap,
+ 					int sbr)
+ {
+ 	struct pci_dev *pdev = vedev->pdev;
