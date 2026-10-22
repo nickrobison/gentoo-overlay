@@ -5,7 +5,7 @@ RPM_COMPRESS_TYPE=xz
 inherit rpm
 
 DESCRIPTION="NEC Aurora Compiler"
-HOMEPAGE="https://github.com/veos-sxarr-NEC/ve_dev-kmod"
+HOMEPAGE="https://sxauroratsubasa.sakura.ne.jp/repos/community/sdk/sdk_el10/fcc/"
 SRC_URI="https://sxauroratsubasa.sakura.ne.jp/repos/community/sdk/sdk_el10/fcc/${PV}/x86_64/nec-nc++-${PV}-${PV}-1.x86_64.rpm"
 S="${WORKDIR}"
 
@@ -16,8 +16,7 @@ KEYWORDS="~amd64"
 DEPEND="sys-devel/binutils-ve
 sys-devel/aurlic
 "
-RDEPEND="${DEPEND} sys-devel/nec-shared"
-BDEPEND=""
+RDEPEND="${DEPEND} sys-devel/ncc-shared"
 
 VE_PREFIX="/opt/nec/ve"
 QA_PREBUILT="${VE_PREFIX}/*"
