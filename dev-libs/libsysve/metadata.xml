@@ -6,6 +6,6 @@
 		<name>Nick Robison</name>
 	</maintainer>
 	<upstream>
-		<remote-id type="github">veos-sxarr-NEC/veos</remote-id>
+		<remote-id type="github">veos-sxarr-NEC/libsysve</remote-id>
 	</upstream>
 </pkgmetadata>

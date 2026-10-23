@@ -10,7 +10,10 @@ S="${WORKDIR}/${P}"
 
 LICENSE="LGPL-2.1+ GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+# No KEYWORDS: overlay convention (like nec-veperf-3.1.0 and every 9999
+# here) -- covered by /etc/portage/package.accept_keywords/sys-libs (* **).
+# Keeping ~amd64 would make pkgcheck demand its 9999 BDEPENDs
+# (app-accel/veos) solve as keyworded packages.
 
 VE_PREFIX="/opt/nec/ve"
 BUILD_DIR="${WORKDIR}/glibc_build"
@@ -23,9 +26,12 @@ QA_PREBUILT="${VE_PREFIX}/*"
 QA_TEXTRELS="opt/nec/ve/*"
 
 # Toolchain for the build (mirrors NEC's glibc.spec: CC=gcc-ve).
-# veos-headers: elf/dl-open.c includes <sysve.h>/<veos_defs.h> under
-# __ve__; NEC's spec omits the BuildRequires because their build host
-# already had veos-headers installed.
+# veos: elf/dl-open.c includes <sysve.h>/<veos_defs.h> under __ve__.
+# Those headers are authored in veos's include/ and installed by veos to
+# /opt/nec/ve/include (default ve_includedir) -- the standalone
+# dev-libs/veos-headers package was dropped in favour of this dep.
+# NEC's spec omits the BuildRequires because their build host already
+# had those headers installed.
 # Bootstrap note: link-time crt/libc must already exist under
 # /opt/nec/ve/lib -- on the first source build that is the previous
 # binary glibc-ve1-2.21 (replaced in-place by this -r1 upgrade), on
@@ -35,7 +41,7 @@ BDEPEND="sys-devel/gcc-ve
 	sys-libs/libgcc-ve1-static
 	sys-devel/binutils-ve
 	sys-kernel/kheaders-ve1
-	dev-libs/veos-headers"
+	app-accel/veos"
 RDEPEND="sys-kernel/kheaders-ve1"
 
 src_unpack() {
