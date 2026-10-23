@@ -1,0 +1,14 @@
+BDEPEND=sys-devel/gcc-ve sys-libs/libgcc-ve1-static sys-devel/binutils-ve sys-kernel/kheaders-ve1 dev-libs/veos-headers || ( app-arch/rpm2targz >=app-arch/rpm-4.19.0 )
+DEFINED_PHASES=compile configure install prepare unpack
+DESCRIPTION=glibc for the SX-Aurora TSUBASA Vector Engine (VE1), from NEC SRPM source
+EAPI=8
+HOMEPAGE=https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el10.0/veos/3.6.0/Source/
+INHERIT=rpm
+KEYWORDS=~amd64
+LICENSE=LGPL-2.1+ GPL-2
+RDEPEND=sys-kernel/kheaders-ve1
+RESTRICT=strip
+SLOT=0
+SRC_URI=https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el10.0/veos/3.6.0/Source/glibc-ve1-2.21-19.el10.src.rpm
+_eclasses_=eapi9-pipestatus	d2c134036ac31c3085aebc9147f572bd	estack	c61c368a76fdf3a82fdf8dbaebea3804	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	rpm	716d8645cb3f94e78951eda6c33e0546
+_md5_=bd71c15c82fe2f0851e50dabe668cfbd
