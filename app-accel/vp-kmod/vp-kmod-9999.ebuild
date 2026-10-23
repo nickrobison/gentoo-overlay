@@ -27,7 +27,15 @@ src_configure() {
 	local myconf=(
 		--prefix="${VE_PREFIX}"
 		--includedir="${EPREFIX}/usr/include"
-		--with-release-id=1
+		# Upstream turns this into MODULE_INFO(release) as "_<id>" and the
+		# module load banner. Its own mkrpm.sh uses a build timestamp; for a
+		# live ebuild the commit is deterministic and more useful.
+		--with-release-id="${EGIT_VERSION:0:8}"
+		# configure.ac defaults KERNEL to `uname -r`, which can differ from
+		# the kernel being emerged for (e.g. @module-rebuild across a kernel
+		# upgrade). That derails both KERNEL_SRC and KERNEL_MOD, and then
+		# modules_post_process finds nothing under ${ED}/lib/modules/${KV_FULL}.
+		--with-kernel="${KV_FULL}"
 	)
 
 	econf "${myconf[@]}"
