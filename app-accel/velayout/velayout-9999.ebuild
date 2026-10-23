@@ -3,20 +3,21 @@ EAPI=8
 
 inherit autotools git-r3
 
-description="log4c layout library for veos"
-homepage="https://github.com/veos-sxarr-nec/velayout"
-egit_repo_uri="https://github.com/veos-sxarr-nec/velayout.git"
+DESCRIPTION="log4c layout library for veos"
+HOMEPAGE="https://github.com/veos-sxarr-nec/velayout"
+EGIT_REPO_URI="https://github.com/veos-sxarr-nec/velayout.git"
 
-license="gpl-2"
-slot="0"
+LICENSE="GPL-2"
+SLOT="0"
 
-depend="dev-libs/log4c"
-rdepend="${depend}"
+DEPEND="dev-libs/log4c"
+RDEPEND="${DEPEND}"
 
-ve_prefix="/opt/nec/ve/veos"
+VE_PREFIX="/opt/nec/ve/veos"
 
 src_prepare() {
 	default
+	eautoreconf
 }
 
 src_configure() {
@@ -28,5 +29,5 @@ src_compile() {
 }
 
 src_install() {
-	emake destdir="${ed}" install
+	emake DESTDIR="${ED}" install
 }

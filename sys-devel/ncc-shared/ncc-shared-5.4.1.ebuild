@@ -17,7 +17,7 @@ KEYWORDS="~amd64"
 #  - foreign-arch (VE/VE3 ELF): portage strip + multilib checks can't handle
 #  - libncc.so contains text relocations
 # NOTE: QA_TEXTRELS paths are anchored relative to ${ED} (no leading slash).
-QA_PREBUILT="/opt/nec/*
+QA_PREBUILT="/opt/nec/*"
 QA_TEXTRELS="opt/nec/ve/* opt/nec/ve3/*"
 RESTRICT="strip"
 
