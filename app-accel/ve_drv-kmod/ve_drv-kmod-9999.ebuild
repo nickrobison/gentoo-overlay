@@ -50,11 +50,16 @@ src_configure() {
 }
 
 src_compile() {
-	emake "${MODULES_MAKEARGS[@]}"
+	# Upstream Makefile hardcodes KERNEL_SRC=/lib/modules/$KERNEL/build, which
+	# only exists once the kernel's modules are installed. linux-mod-r1 has
+	# already resolved the actual (possibly split) build tree as KV_OUT_DIR and
+	# verified its Module.symvers, so build against that instead.
+	emake "${MODULES_MAKEARGS[@]}" KERNEL_SRC="${KV_OUT_DIR}"
 }
 
 src_install() {
-	emake "${MODULES_MAKEARGS[@]}" DESTDIR="${ED}" install
+	emake "${MODULES_MAKEARGS[@]}" KERNEL_SRC="${KV_OUT_DIR}" \
+		DESTDIR="${ED}" install
 	modules_post_process
 }
 
