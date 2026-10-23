@@ -1,0 +1,13 @@
+diff --git a/lib/libvepseudo/common/sys_common.h b/lib/libvepseudo/common/sys_common.h
+index e677167..59d5d46 100644
+--- a/lib/libvepseudo/common/sys_common.h
++++ b/lib/libvepseudo/common/sys_common.h
+@@ -35,7 +35,7 @@
+ #include <limits.h>
+ #include <signal.h>
+ #include <sys/mman.h>
+-#include <linux/termios.h>
++#include <termios.h>
+ #include <time.h>
+ #include <sys/uio.h>
+ #include <sched.h>
