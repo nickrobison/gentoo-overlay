@@ -1,8 +1,12 @@
 EAPI=8
 
-RPM_COMPRESS_TYPE="zstd"
+RPM_COMPRESS_TYPE="xz"
 
 inherit rpm systemd
+
+# mmm payload has root-locked config dirs: the rpm2targz cpio shim chokes on
+# them as the build user; force the tar-based rpm2archive path instead.
+BDEPEND=">=app-arch/rpm-4.19.0[lzma(+)]"
 
 DESCRIPTION="NEC Vector Engine Monitoring and Maintenance Manager (vecmd)"
 HOMEPAGE="https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el8.10/mmm/"
@@ -13,9 +17,7 @@ LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS="~amd64"
 
-RESTRICT="bindist mirror strip"
-
-BDEPEND="app-arch/rpm[zstd(+)]"
+RESTRICT="bindist mirror strip userpriv"
 
 RDEPEND="
 	app-accel/libved
