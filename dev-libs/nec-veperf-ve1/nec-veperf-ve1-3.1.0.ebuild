@@ -12,7 +12,9 @@ SRC_URI="
 S="${WORKDIR}"
 
 SLOT="0"
-KEYWORDS="~amd64"
+# No KEYWORDS: overlay convention (see sys-libs/glibc-ve1) -- covered by
+# /etc/portage/package.accept_keywords/dev-libs (* **); keywording it
+# would make pkgcheck demand its keywordless glibc-ve1 RDEPEND solve.
 
 VE_PREFIX="/opt/nec/ve"
 
