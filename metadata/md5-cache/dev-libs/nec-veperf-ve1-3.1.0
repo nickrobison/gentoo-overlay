@@ -1,0 +1,12 @@
+BDEPEND=|| ( app-arch/rpm2targz >=app-arch/rpm-4.19.0[lzma(+)] )
+DEFINED_PHASES=install unpack
+DESCRIPTION=SX-Aurora VE1 veperf performance-counter libraries (runtime + devel)
+EAPI=8
+HOMEPAGE=https://www.nec.com/en/global/products/micro/ve/
+INHERIT=rpm
+RDEPEND=sys-libs/glibc-ve1
+RESTRICT=strip
+SLOT=0
+SRC_URI=https://sxauroratsubasa.sakura.ne.jp/repos/community/sdk/sdk_el10/tuningtool/251020/nec-veperf-ve1-libs-3.1.0-2.x86_64.rpm https://sxauroratsubasa.sakura.ne.jp/repos/community/sdk/sdk_el10/tuningtool/251020/nec-veperf-ve1-devel-3.1.0-2.x86_64.rpm
+_eclasses_=eapi9-pipestatus	d2c134036ac31c3085aebc9147f572bd	estack	c61c368a76fdf3a82fdf8dbaebea3804	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	rpm	716d8645cb3f94e78951eda6c33e0546
+_md5_=8f0f68f2fe74984ab1bfbb68776e8ce9

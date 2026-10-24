@@ -1,0 +1,16 @@
+diff --git a/configure.ac b/configure.ac
+--- a/configure.ac
++++ b/configure.ac
+@@ -136,10 +136,8 @@
+   AC_MSG_ERROR([udevadm is not found.])
+ fi
+ 
+-# Check for libprocps
+-AC_CHECK_LIB([procps], [openproc], [], [AC_MSG_ERROR([procps-ng-devel library support missing/incomplete])])
+-AC_DEFINE([USE_OPENPROC], [1], [Use openproc when libprocps is present])
+-CFLAGS="$CFLAGS -DUSE_OPENPROC"
++# Check for libproc2 (procps-ng >= 4.x; the pids API used by the source)
++AC_CHECK_LIB([proc2], [procps_pids_new], [], [AC_MSG_ERROR([procps-ng (libproc2) library support missing/incomplete])])
+ 
+ # Checks for libraries.
+ LDFLAGS="$LDFLAGS -L${prefix}/lib -L${prefix}/lib64"

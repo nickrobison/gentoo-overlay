@@ -1,0 +1,12 @@
+BDEPEND=|| ( app-arch/rpm2targz >=app-arch/rpm-4.19.0 )
+DEFINED_PHASES=compile install postinst prepare unpack
+DESCRIPTION=AVEO: VE Offloading Framework based on VE-UDMA RPC (libveo)
+EAPI=8
+HOMEPAGE=https://github.com/veos-sxarr-NEC/veoffload
+INHERIT=rpm
+LICENSE=LGPL-2.1
+RDEPEND=app-accel/veos sys-libs/libcap
+SLOT=0
+SRC_URI=https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el10.0/veos/3.6.0/Source/veoffload-aveo-3.6.0-1.el10.src.rpm
+_eclasses_=eapi9-pipestatus	d2c134036ac31c3085aebc9147f572bd	estack	c61c368a76fdf3a82fdf8dbaebea3804	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	rpm	716d8645cb3f94e78951eda6c33e0546
+_md5_=dec94783083ea75ff1b0dd81f4f7611e

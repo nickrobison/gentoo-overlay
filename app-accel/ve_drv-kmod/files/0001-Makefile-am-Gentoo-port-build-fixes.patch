@@ -1,0 +1,41 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -46,15 +46,22 @@
+ dist_noinst_DATA = helper/ve_check_config helper/ve_drv.te
+ noinst_PROGRAMS = helper/ve_check_config_wrapper
+ 
+-ve_check_config_wrapper_SOURCES = header/ve_check_config_wrapper.c
++ve_check_config_wrapper_SOURCES = helper/ve_check_config_wrapper.c
++
++# vp module build artifacts (overridable for staging paths)
++vp_module_symvers = $(prefix)/src/ve_kernel/Module.symvers
+ 
+ # git commit id
+ src/commitid.h:
+-	echo "#define COMMITID \"`git log --pretty=format:"%H" -n 1`\"" >> $@
++	echo "#define COMMITID \"`git log --pretty=format:"%H" -n 1`\"" > $@
+ 
+ # header file of vp module
+ src/vp.h:
+-	cp @prefix@/include/vp.h $(abs_top_builddir)/src
++	if test -s @includedir@/vp.h; then \
++		cp @includedir@/vp.h $(abs_top_builddir)/src; \
++	else \
++		cp @prefix@/include/vp.h $(abs_top_builddir)/src; \
++	fi
+ src/sensor_ve1.h: src/sensor_ve1.tbl
+ 	$(srcdir)/src/gen_code.sh $(srcdir)/src/sensor_ve1.tbl > sensor_ve1.h
+ 	mv sensor_ve1.h $(abs_top_builddir)/src/
+@@ -64,10 +71,10 @@
+ 
+ src/ve_drv.ko: src/vp.h $(SENSOR_HDRS) src/sensor_ve1.tbl src/sensor_ve3.tbl src/commitid.h
+ 	for file in $(EXTRA_DIST); do \
+-		test -f $(builddir)/$$file || \
++		test -e $(builddir)/$$file || \
+ 		$(LN_S) $(abs_top_srcdir)/$$file $(builddir)/src; \
+ 	done
+-	KBUILD_EXTRA_SYMBOLS=/opt/nec/ve/veos/src/ve_kernel/Module.symvers \
++	KBUILD_EXTRA_SYMBOLS=$(vp_module_symvers) \
+ 	$(MAKE) -C $(KERNEL_SRC) M=$(abs_top_builddir)/src
+ 
+ all-local: src/ve_drv.ko

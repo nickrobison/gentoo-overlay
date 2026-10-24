@@ -1,0 +1,194 @@
+diff --git a/lib/libvepseudo/psm/pseudo_procinfo.c b/lib/libvepseudo/psm/pseudo_procinfo.c
+index 7f1cfe4..b513238 100644
+--- a/lib/libvepseudo/psm/pseudo_procinfo.c
++++ b/lib/libvepseudo/psm/pseudo_procinfo.c
+@@ -101,7 +101,7 @@ static int pseudo_get_proc_status_from_procps(pid_t pid, char *status)
+ 		}
+ 		return -1;
+ 	}
+-	*status = PIDS_VAL(rel_state, s_ch, pids->stacks[0], info);
++	*status = PIDS_VAL(rel_state, s_ch, pids->stacks[0]);
+ 	ret = procps_pids_unref(&info);
+ 	if (ret < 0) {
+ 		PSEUDO_ERROR("failed to unref pids_info for pid:%d : %s",
+@@ -164,7 +164,7 @@ static int pseudo_is_child_exit_from_procps(pid_t pid)
+ 		PSEUDO_DEBUG("procps returned empty stack/counts for pid:%d", pid);
+ 		goto handle_unref;
+ 	}
+-	if (PIDS_VAL(rel_state, s_ch, pids->stacks[0], info) == 'Z') {
++	if (PIDS_VAL(rel_state, s_ch, pids->stacks[0]) == 'Z') {
+ 		PSEUDO_DEBUG("VH process has become zombie");
+ 		goto handle_unref;
+ 	}
+
+diff --git a/lib/libvepseudo/sys/sys_offload.c b/lib/libvepseudo/sys/sys_offload.c
+index acbc1a0..a447aa7 100644
+--- a/lib/libvepseudo/sys/sys_offload.c
++++ b/lib/libvepseudo/sys/sys_offload.c
+@@ -278,8 +278,7 @@ ret_t ve_hndl_readv_preadv_nonatomic(int syscall_num, char *syscall_name,
+ 	uint64_t *ve_buff_addr = NULL;
+ 	sigset_t signal_mask = { {0} };
+ 	int dio_flag = -1;
+-	int cnt = 0;
+-	int iovec_offset = 0;
++		int iovec_offset = 0;
+ 
+ 	non_atomic_msg_t* non_atomic_io = NULL;
+ 
+@@ -438,7 +437,6 @@ ret_t ve_hndl_readv_preadv_nonatomic(int syscall_num, char *syscall_name,
+ 			goto hndl_return3;
+ 		}
+ 
+-		cnt++;
+ 
+ 		while (non_atomic_io[i].io_size < non_atomic_io[i].io_req_size)
+ 		{
+@@ -1880,12 +1878,12 @@ ret_t ve_hndl_readv_preadv(int syscall_num, char *syscall_name,
+ 	struct iovec *vh_iov = NULL;
+ 	int iovcnt = 0, i = 0;
+ 	int err_flag = -1;
+-	int cnt = 0;
+-	uint64_t args[4] = {0};
++		uint64_t args[4] = {0};
+ 	uint64_t *ve_buff_addr = NULL;
+ 	sigset_t signal_mask = { {0} };
+ 	size_t send_bytes = -1;
+ 	int dio_flag = -1;
++	int cnt = 0;
+ 
+ 	PSEUDO_TRACE("Entering");
+ 	/* get arguments */
+@@ -2789,7 +2787,7 @@ ret_t ve_ioctl(int syscall_num, char *syscall_name, veos_handle *handle)
+ 	char *buff = NULL;
+ 	int argp = 0;
+ 	struct termios termios_buff = {0};
+-	struct termio termio_buff = {0};
++	struct termios termio_buff = {0};
+ 	struct winsize winsize_buff = {0};
+ 	sigset_t signal_mask = { {0} };
+ 
+@@ -2908,7 +2906,7 @@ ret_t ve_ioctl(int syscall_num, char *syscall_name, veos_handle *handle)
+ 		/* send the filled termio_buf */
+ 		if (NULL != (void *)args[2]) {
+ 			if (0 > ve_send_data(handle, args[2],
+-						sizeof(struct termio),
++						sizeof(struct termios),
+ 						(uint64_t *)(&termio_buff))) {
+ 				PSEUDO_ERROR("Failed to send data to VE"
+ 					" memory");
+@@ -3088,7 +3086,7 @@ ret_t ve_ioctl(int syscall_num, char *syscall_name, veos_handle *handle)
+ 		/* Receive struct termio data buffer from VE */
+ 		if (args[2]) {
+ 			if (0 > ve_recv_data(handle, args[2],
+-					sizeof(struct termio), &termio_buff)) {
++					sizeof(struct termios), &termio_buff)) {
+ 				PSEUDO_ERROR("Failed(%s) to receive %s"
+ 						" argument from ve",
+ 						strerror(errno), SYSCALL_NAME);
+
+diff --git a/src/veos/amm/elf_dump.c b/src/veos/amm/elf_dump.c
+index 05e68c2..63703db 100644
+--- a/src/veos/amm/elf_dump.c
++++ b/src/veos/amm/elf_dump.c
+@@ -735,7 +735,6 @@ static int fill_files_note(struct memelfnote *note,
+ 	unsigned int count = 0;
+ 	unsigned int size = 0;
+ 	unsigned int names_ofs = 0;
+-	unsigned int remaining = 0;
+ 	unsigned int n = 0;
+ 	struct _psuedo_pmap *pmap = NULL;
+ 	long *start_end_ofs = NULL;
+@@ -762,7 +761,6 @@ static int fill_files_note(struct memelfnote *note,
+ 	free_mem[blockIdx++] = (void *)data;
+ 	start_end_ofs = data + BUF_2BYTES;
+ 	name_base = name_curpos = ((char *)data) + names_ofs;
+-	remaining = size - names_ofs;
+ 
+ 	count = 0;
+ 	while (pmap != NULL) {
+@@ -783,7 +781,6 @@ static int fill_files_note(struct memelfnote *note,
+ 		}
+ 		(void)memcpy((void *)filename, pmap->mapname, length);
+ 
+-		remaining -= length ;
+ 		(void)memcpy((void *)name_curpos, (void *)filename, length);
+ 		name_curpos += length;
+ 
+
+diff --git a/src/veos/psm/psm_procinfo.c b/src/veos/psm/psm_procinfo.c
+index 0d9dc07..9b28089 100644
+--- a/src/veos/psm/psm_procinfo.c
++++ b/src/veos/psm/psm_procinfo.c
+@@ -119,22 +119,22 @@ static int psm_get_proc_info_from_procps(pid_t pid, proc_t *ve_proc_info)
+ 		goto hndl_unref;
+ 	}
+ 	stack = pids->stacks[0];
+-	ve_proc_info->tid = PIDS_VAL(rel_tid, s_int, stack, info);
+-	ve_proc_info->euid = PIDS_VAL(rel_euid, u_int, stack, info);
+-	ve_proc_info->egid = PIDS_VAL(rel_egid, u_int, stack, info);
+-	ve_proc_info->ruid = PIDS_VAL(rel_ruid, u_int, stack, info);
+-	ve_proc_info->rgid = PIDS_VAL(rel_rgid, u_int, stack, info);
+-	ve_proc_info->suid = PIDS_VAL(rel_suid, u_int, stack, info);
+-	ve_proc_info->sgid = PIDS_VAL(rel_sgid, u_int, stack, info);
+-	ve_proc_info->fuid = PIDS_VAL(rel_fuid, u_int, stack, info);
+-	ve_proc_info->fgid = PIDS_VAL(rel_fgid, u_int, stack, info);
+-	ve_proc_info->state = PIDS_VAL(rel_state, s_ch, stack, info);
+-	ve_proc_info->ns[IPCNS] = PIDS_VAL(rel_ns_ipc, ul_int, stack, info);
+-	ve_proc_info->ns[MNTNS] = PIDS_VAL(rel_ns_mnt, ul_int, stack, info);
+-	ve_proc_info->ns[NETNS] = PIDS_VAL(rel_ns_net, ul_int, stack, info);
+-	ve_proc_info->ns[PIDNS] = PIDS_VAL(rel_ns_pid, ul_int, stack, info);
+-	ve_proc_info->ns[USERNS] = PIDS_VAL(rel_ns_user, ul_int, stack, info);
+-	ve_proc_info->ns[UTSNS] = PIDS_VAL(rel_ns_uts, ul_int, stack, info);
++	ve_proc_info->tid = PIDS_VAL(rel_tid, s_int, stack);
++	ve_proc_info->euid = PIDS_VAL(rel_euid, u_int, stack);
++	ve_proc_info->egid = PIDS_VAL(rel_egid, u_int, stack);
++	ve_proc_info->ruid = PIDS_VAL(rel_ruid, u_int, stack);
++	ve_proc_info->rgid = PIDS_VAL(rel_rgid, u_int, stack);
++	ve_proc_info->suid = PIDS_VAL(rel_suid, u_int, stack);
++	ve_proc_info->sgid = PIDS_VAL(rel_sgid, u_int, stack);
++	ve_proc_info->fuid = PIDS_VAL(rel_fuid, u_int, stack);
++	ve_proc_info->fgid = PIDS_VAL(rel_fgid, u_int, stack);
++	ve_proc_info->state = PIDS_VAL(rel_state, s_ch, stack);
++	ve_proc_info->ns[IPCNS] = PIDS_VAL(rel_ns_ipc, ul_int, stack);
++	ve_proc_info->ns[MNTNS] = PIDS_VAL(rel_ns_mnt, ul_int, stack);
++	ve_proc_info->ns[NETNS] = PIDS_VAL(rel_ns_net, ul_int, stack);
++	ve_proc_info->ns[PIDNS] = PIDS_VAL(rel_ns_pid, ul_int, stack);
++	ve_proc_info->ns[USERNS] = PIDS_VAL(rel_ns_user, ul_int, stack);
++	ve_proc_info->ns[UTSNS] = PIDS_VAL(rel_ns_uts, ul_int, stack);
+ 	retval = 0;
+ hndl_unref:
+ 	ret = procps_pids_unref(&info);
+@@ -208,9 +208,9 @@ static bool psm_is_pseudo_stop_from_procps(int pid)
+ 			VEOS_DEBUG("failed to get stack for pid: %d", pid);
+ 			goto hndl_unref;
+ 		}
+-		tgid = PIDS_VAL(rel_tgid, s_int, pids->stacks[i], info);
+-		nlwp = PIDS_VAL(rel_nlwp, s_int, pids->stacks[i], info);
+-		proc_stat = PIDS_VAL(rel_state, s_ch, pids->stacks[i], info);
++		tgid = PIDS_VAL(rel_tgid, s_int, pids->stacks[i]);
++		nlwp = PIDS_VAL(rel_nlwp, s_int, pids->stacks[i]);
++		proc_stat = PIDS_VAL(rel_state, s_ch, pids->stacks[i]);
+ 		if (tgid == pid)
+ 			break;
+ 	}
+@@ -232,8 +232,8 @@ static bool psm_is_pseudo_stop_from_procps(int pid)
+ 				goto hndl_unref;
+ 			}
+ 
+-			tgid = PIDS_VAL(rel_tgid, s_int, pids->stacks[i], info);
+-			state = PIDS_VAL(rel_state, s_ch, pids->stacks[i], info);
++			tgid = PIDS_VAL(rel_tgid, s_int, pids->stacks[i]);
++			state = PIDS_VAL(rel_state, s_ch, pids->stacks[i]);
+ 			if ((tgid != pid) && (state != 'T')) {
+ 				retval = false;
+ 				break;
+@@ -308,7 +308,7 @@ static bool psm_get_start_time_form_procps(pid_t pid, unsigned long long *stime)
+ 		retval = true;
+ 		goto hndl_unref;
+ 	}
+-	*stime = PIDS_VAL(rel_start_time, ull_int, pids->stacks[0], info);
++	*stime = PIDS_VAL(rel_start_time, ull_int, pids->stacks[0]);
+ hndl_unref:
+ 	ret = procps_pids_unref(&info);
+ 	if (ret < 0) {
+

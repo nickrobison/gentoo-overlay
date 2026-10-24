@@ -1,0 +1,238 @@
+--- a/src/fops.c
++++ b/src/fops.c
+@@ -211,7 +211,7 @@
+  *         -ESRCH if the VE task id is not same as current tid
+  *                if task is not created.
+  */
+-int ve_drv_wait_exception(struct file *filp, uint64_t __user *user_exs)
++static int ve_drv_wait_exception(struct file *filp, uint64_t __user *user_exs)
+ {
+ 	struct ve_task *task;
+ 	struct ve_dev *vedev;
+@@ -328,35 +328,6 @@
+ }
+ 
+ /**
+- * @brief Get the number of VE core
+- *
+- * @param[in] vedev: VE device structure
+- *
+- * @return number of VE core
+- */
+-int ve_drv_get_core_num(struct ve_dev *vedev)
+-{
+-	pdev_trace(vedev->pdev);
+-
+-	return vedev->node->hw_info.num_of_core;
+-}
+-
+-/**
+- * @brief Get physical memory size of VE
+- *
+- * @param[in] vedev: VE device structure
+- * @param[out] size: Size of memory will be stored
+- *
+- * @return 0 on success. Negative on failure.
+- */
+-int ve_drv_get_memory_size(struct ve_dev *vedev, uint64_t __user *size)
+-{
+-	pdev_trace(vedev->pdev);
+-
+-	return put_user(vedev->node->hw_info.memory_size, size);
+-}
+-
+-/**
+  * @brief Print task information to the buffer
+  *        This function is called via sysfs
+  *
+@@ -527,7 +498,7 @@
+  *         -EINVAL on invalid core ID in arg.
+  *         -ESRCH on invalid task ID in arg.
+  */
+-int ve_drv_assign_task_to_core(struct ve_dev *vedev,
++static int ve_drv_assign_task_to_core(struct ve_dev *vedev,
+ 		struct ve_tid_core __user *arg)
+ {
+ 	int err;
+@@ -695,7 +666,7 @@
+  *                 VE task can not be unassigned now.
+  *         -ESRCH if the VE task of the ID is not found.
+  */
+-int ve_drv_del_ve_task(struct ve_dev *vedev, pid_t tid_ns)
++static int ve_drv_del_ve_task(struct ve_dev *vedev, pid_t tid_ns)
+ {
+ 	struct ve_node *node = vedev->node;
+ 	struct list_head *head = &node->task_head;
+@@ -767,7 +738,7 @@
+  *         -EINVAL if the VE task is in non-revival state.
+  *         -ESRCH if the VE task of the ID is not found.
+  */
+-int ve_drv_revive_ve_task(struct ve_dev *vedev, pid_t tid_ns)
++static int ve_drv_revive_ve_task(struct ve_dev *vedev, pid_t tid_ns)
+ {
+ 	struct ve_node *node = vedev->node;
+ 	struct list_head *head = &node->task_head;
+@@ -993,7 +964,7 @@
+  * @return 0 on success.
+  *         -ESRCH if VE task ID is not found
+  */
+-int ve_drv_add_ve_task(struct ve_dev *vedev, pid_t tid_ns)
++static int ve_drv_add_ve_task(struct ve_dev *vedev, pid_t tid_ns)
+ {
+ 	struct ve_node *node = vedev->node;
+ 	struct list_head *head = &node->task_head;
+@@ -1038,7 +1009,7 @@
+  * @return 0 on success.
+  *         -EINVAL if the core ID is invalid.
+  */
+-int ve_drv_reset_intr_count(struct ve_dev *vedev, uint64_t core_id)
++static int ve_drv_reset_intr_count(struct ve_dev *vedev, uint64_t core_id)
+ {
+ 	/* Do nothing */
+ 
+@@ -1102,7 +1073,7 @@
+  *         -EINTR if it is interrupted by signal.
+  *         -ETIMEDOUT in case of timeout.
+  */
+-int ve_drv_wait_intr(struct ve_dev *vedev, struct ve_wait_irq_arg *usr)
++static int ve_drv_wait_intr(struct ve_dev *vedev, struct ve_wait_irq_arg *usr)
+ {
+ 	int ret, retval;
+ 
+@@ -1160,7 +1131,7 @@
+  *         -EINVAL if the argument is incorrect or UID is already assigned.
+  *         -ENOMEM on lacking of memory.
+  */
+-int ve_drv_assign_cr(struct ve_dev *vedev, struct ve_cr_assign *usr)
++static int ve_drv_assign_cr(struct ve_dev *vedev, struct ve_cr_assign *usr)
+ {
+ 	int err;
+ 	struct ve_cr_assign arg;
+@@ -1256,7 +1227,7 @@
+  * @return 0 on success.
+  *         -EINVAL if the argument is incorrect or UID is already assigned.
+  */
+-int ve_drv_unassign_cr(struct ve_dev *vedev, struct ve_cr_assign *usr)
++static int ve_drv_unassign_cr(struct ve_dev *vedev, struct ve_cr_assign *usr)
+ {
+ 	int err;
+ 	struct ve_cr_assign arg;
+@@ -1339,7 +1310,7 @@
+  *
+  * @return 0 on success.
+  */
+-int ve_drv_assign_vemem(struct ve_dev *vedev, struct ve_pcimem_assign *usr)
++static int ve_drv_assign_vemem(struct ve_dev *vedev, struct ve_pcimem_assign *usr)
+ {
+ 	int err;
+ 	struct ve_pcimem_assign arg;
+@@ -1399,7 +1370,7 @@
+  *
+  * @return 0 on success.
+  */
+-int ve_drv_unassign_vemem(struct ve_dev *vedev, struct ve_pcimem_assign *usr)
++static int ve_drv_unassign_vemem(struct ve_dev *vedev, struct ve_pcimem_assign *usr)
+ {
+ 	int err;
+ 	struct ve_pcimem_assign arg;
+@@ -1451,7 +1422,7 @@
+  * @return 0 on success.
+  *         -EINVAL if the argument is invalid or EXSRAR is not available.
+  */
+-int ve_drv_reset_exsrar_mem(struct ve_dev *vedev, int core_id)
++static int ve_drv_reset_exsrar_mem(struct ve_dev *vedev, int core_id)
+ {
+ 	struct ve_node *node = vedev->node;
+ 
+@@ -1504,7 +1475,7 @@
+ 	return 0;
+ }
+ 
+-long ve_drv_cmd_vhva_to_vsaa(struct ve_dev *dev,
++static long ve_drv_cmd_vhva_to_vsaa(struct ve_dev *dev,
+ 		struct ve_vp __user *uptr, int pindown)
+ {
+ 	int ret;
+@@ -1525,7 +1496,7 @@
+ 	return ret;
+ }
+ 
+-long ve_drv_cmd_vhva_to_vsaa_blk(struct ve_dev *dev,
++static long ve_drv_cmd_vhva_to_vsaa_blk(struct ve_dev *dev,
+ 		struct ve_vp_blk __user *uptr, int pindown)
+ {
+ 	int ret;
+@@ -1546,7 +1517,7 @@
+ 	return ret;
+ }
+ 
+-long ve_drv_cmd_release_pd_page(struct ve_dev *dev,
++static long ve_drv_cmd_release_pd_page(struct ve_dev *dev,
+ 		struct ve_vp_release __user *uptr, int all)
+ {
+ 	int ret;
+@@ -1576,7 +1547,7 @@
+ 	return ret;
+ }
+ 
+-long ve_drv_cmd_count_pd_page(struct ve_dev *dev,
++static long ve_drv_cmd_count_pd_page(struct ve_dev *dev,
+ 		struct ve_vp_release __user *uptr)
+ {
+ 	int ret;
+@@ -1599,7 +1570,7 @@
+ }
+ 
+ 
+-pid_t ve_drv_host_pid(struct ve_dev *dev, struct ve_get_host_pid *arg)
++static pid_t ve_drv_host_pid(struct ve_dev *dev, struct ve_get_host_pid *arg)
+ {
+ 	int err;
+ 	struct ve_get_host_pid tmp;
+@@ -1650,7 +1621,7 @@
+ 	return pid;
+ }
+ 
+-long ve_drv_cmd_release_pd_page_blk(struct ve_dev *dev,
++static long ve_drv_cmd_release_pd_page_blk(struct ve_dev *dev,
+ 		struct ve_vp_blk_release __user *uptr)
+ {
+ 	int ret;
+--- a/src/fops_ve1.c
++++ b/src/fops_ve1.c
+@@ -147,7 +147,7 @@
+ 	}
+ }
+ 
+-int ve_drv_compat_ve1_wait_intr(struct ve_dev *vedev,
++static int ve_drv_compat_ve1_wait_intr(struct ve_dev *vedev,
+ 				struct ve1_compat_wait_irq_arg *usr)
+ {
+ 	int ret, retval;
+--- a/src/main_ve3.c
++++ b/src/main_ve3.c
+@@ -667,7 +667,7 @@
+ 	return cap & PCI_EXP_DEVCAP_FLR;
+ }
+ 
+-int ve3_init_hw_check(struct ve_dev *vedev, int notify)
++static int ve3_init_hw_check(struct ve_dev *vedev, int notify)
+ {
+ 	int err;
+ 	int sensor_num;
+@@ -694,13 +694,13 @@
+ 	return err;
+ }
+ 
+-int ve3_init_early(struct ve_dev *vedev)
++static int ve3_init_early(struct ve_dev *vedev)
+ {
+   return ve3_wait_hw_identifier(vedev, wait_sec_ve_init_done, -1);
+ }
+ 
+ 
+-int ve3_init_hw_check_early(struct ve_dev *vedev)
++static int ve3_init_hw_check_early(struct ve_dev *vedev)
+ {
+   return ve3_init_hw_check(vedev, 0);
+ 

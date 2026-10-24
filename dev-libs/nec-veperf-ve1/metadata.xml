@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<longdescription lang="en">
+		Closed-source VE1 performance-counter and profiling libraries
+		from the NEC veperf tuning tool (runtime .so.1 objects plus
+		development headers and link stubs), distributed as binary
+		RPMs in the NEC SDK community repository.
+	</longdescription>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+</pkgmetadata>

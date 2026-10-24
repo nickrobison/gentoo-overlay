@@ -1,0 +1,15 @@
+BDEPEND=|| ( app-arch/rpm2targz >=app-arch/rpm-4.19.0[lzma(+)] )
+DEFINED_PHASES=install unpack
+DEPEND=sys-devel/binutils-ve sys-libs/libgcc-ve1-static sys-libs/mpfr-compat
+DESCRIPTION=GCC 7.1.0 port for the SX-Aurora TSUBASA Vector Engine (prebuilt)
+EAPI=8
+HOMEPAGE=https://github.com/veos-sxarr-NEC/gcc-ve
+INHERIT=rpm
+KEYWORDS=~amd64
+LICENSE=GPL-3
+RDEPEND=sys-devel/binutils-ve sys-libs/libgcc-ve1-static sys-libs/mpfr-compat
+RESTRICT=strip
+SLOT=0
+SRC_URI=https://github.com/veos-sxarr-NEC/gcc-ve/releases/download/gcc-ve-7.1.0-7/gcc-ve-7.1.0-7.el8.x86_64.rpm
+_eclasses_=eapi9-pipestatus	d2c134036ac31c3085aebc9147f572bd	estack	c61c368a76fdf3a82fdf8dbaebea3804	rpm	716d8645cb3f94e78951eda6c33e0546	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5
+_md5_=11e725dec6b16526db7b664a178b40ba
