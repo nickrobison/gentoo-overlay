@@ -3,9 +3,14 @@ EAPI=8
 RPM_COMPRESS_TYPE="xz"
 inherit rpm
 
-DESCRIPTION="GCC 7.1.0 port for the SX-Aurora TSUBASA Vector Engine"
+# Prebuilt RPM bootstrap compiler, renamed from sys-devel/gcc-ve so the
+# source rebuild (sys-devel/gcc-ve, git-r3 from veos-sxarr-NEC/gcc-ve)
+# can land under the canonical name without breaking dependents.
+
+DESCRIPTION="GCC 7.1.0 port for the SX-Aurora TSUBASA Vector Engine (prebuilt)"
 HOMEPAGE="https://github.com/veos-sxarr-NEC/gcc-ve"
-SRC_URI="https://github.com/veos-sxarr-NEC/gcc-ve/releases/download/gcc-ve-${PV}-7/${P}-7.el8.x86_64.rpm"
+# ${P} is gcc-ve-bin-* now; the upstream artifact keeps its gcc-ve name.
+SRC_URI="https://github.com/veos-sxarr-NEC/gcc-ve/releases/download/gcc-ve-${PV}-7/gcc-ve-${PV}-7.el8.x86_64.rpm"
 S="${WORKDIR}"
 
 LICENSE="GPL-3"
@@ -30,10 +35,10 @@ DEPEND="sys-devel/binutils-ve
 	sys-libs/mpfr-compat"
 RDEPEND="${DEPEND}"
 
-src_unpack() {
-	default
-	rpm_unpack "${P}-7.el8.x86_64.rpm"
-}
+	src_unpack() {
+		default
+		rpm_unpack "gcc-ve-${PV}-7.el8.x86_64.rpm"
+	}
 
 src_install() {
 	# Payload: opt/nec/ve/{bin,lib,libexec,include/c++,share,...}.

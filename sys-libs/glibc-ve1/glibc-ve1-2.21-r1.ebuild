@@ -37,7 +37,7 @@ QA_TEXTRELS="opt/nec/ve/*"
 # binary glibc-ve1-2.21 (replaced in-place by this -r1 upgrade), on
 # later rebuilds the previously installed copy of this very package.
 # That self-hosting is intentionally not expressed as a dependency.
-BDEPEND="sys-devel/gcc-ve
+BDEPEND="sys-devel/gcc-ve-bin
 	sys-libs/libgcc-ve1-static
 	sys-devel/binutils-ve
 	sys-kernel/kheaders-ve1

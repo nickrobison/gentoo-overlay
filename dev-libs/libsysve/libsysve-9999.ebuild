@@ -23,10 +23,11 @@ VE_PREFIX="/opt/nec/ve"
 # gcc-ve links clean with the merged chain (glibc-ve1 + veperf) and
 # assembles the .S/.s files through nas, so it breaks the cycle.
 RDEPEND="sys-libs/glibc-ve1"
-BDEPEND="sys-devel/gcc-ve
+BDEPEND+="
+	sys-devel/gcc-ve-bin
 	sys-devel/binutils-ve
-	sys-devel/gnuconfig
-	app-accel/veos"
+	app-accel/veos
+"
 
 # VE ELF: portage would strip with host binutils; host scanelf cannot
 # parse the VE machine type (UNKNOWN_TYPE QA otherwise).
