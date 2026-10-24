@@ -1,0 +1,14 @@
+BDEPEND=app-arch/rpm[zstd(+)] || ( app-arch/rpm2targz >=app-arch/rpm-4.19.0[zstd(+)] ) virtual/pkgconfig
+DEFINED_PHASES=install postinst unpack
+DESCRIPTION=NEC Vector Engine Monitoring and Maintenance Manager (vecmd)
+EAPI=8
+HOMEPAGE=https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el8.10/mmm/
+INHERIT=rpm systemd
+KEYWORDS=~amd64
+LICENSE=all-rights-reserved
+RDEPEND=app-accel/libved dev-libs/libyaml dev-libs/openssl-compat:1.1.1 x11-libs/libpciaccess virtual/libudev virtual/zlib
+RESTRICT=bindist mirror strip
+SLOT=0
+SRC_URI=https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el8.10/mmm/3.1.2/mmm-3.1.2-0.el8.x86_64.rpm
+_eclasses_=eapi9-pipestatus	d2c134036ac31c3085aebc9147f572bd	estack	c61c368a76fdf3a82fdf8dbaebea3804	rpm	716d8645cb3f94e78951eda6c33e0546	systemd	a964c0cbe818b5729da1dbfcee5be861	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5
+_md5_=f195bb5c2b7e7a20f4d53712d5afe745

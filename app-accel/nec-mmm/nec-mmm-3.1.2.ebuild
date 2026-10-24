@@ -5,8 +5,8 @@ RPM_COMPRESS_TYPE="zstd"
 inherit rpm systemd
 
 DESCRIPTION="NEC Vector Engine Monitoring and Maintenance Manager (vecmd)"
-HOMEPAGE="https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el10.0/mmm/"
-SRC_URI="https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el10.0/mmm/mmm-${PV}-0.el10.x86_64.rpm"
+HOMEPAGE="https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el8.10/mmm/"
+SRC_URI="https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el8.10/mmm/${PV}/mmm-${PV}-0.el8.x86_64.rpm"
 S="${WORKDIR}"
 
 LICENSE="all-rights-reserved"
@@ -20,10 +20,10 @@ BDEPEND="app-arch/rpm[zstd(+)]"
 RDEPEND="
 	app-accel/libved
 	dev-libs/libyaml
-	dev-libs/openssl:=
-	virtual/zlib
-	virtual/libudev
+	dev-libs/openssl-compat:1.1.1
 	x11-libs/libpciaccess
+	virtual/libudev
+	virtual/zlib
 "
 
 VE_PREFIX="/opt/nec/ve"
