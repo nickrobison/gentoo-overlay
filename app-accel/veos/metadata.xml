@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<longdescription lang="en">
+		Vector Engine Operating System (VEOS): host-side daemon and
+		libraries that manage NEC Aurora Vector Engines, including the
+		libvepseudo interface consumed by libveo (veoffload).
+	</longdescription>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<upstream>
+		<remote-id type="github">veos-sxarr-NEC/veos</remote-id>
+	</upstream>
+</pkgmetadata>

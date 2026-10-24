@@ -1,0 +1,54 @@
+--- a/src/mmap.c
++++ b/src/mmap.c
+@@ -119,15 +119,14 @@
+ 	}
+ 	task->mmap = true;
+ 	spin_unlock_irqrestore(&vedev->node->lock, flags);
+-#if RHEL_RELEASE_VERSION(RHEL_MAJOR, RHEL_MINOR) > RHEL_RELEASE_VERSION(8, 5)
+-	//
+-	// VM_PFNMAP with only VM_SHARED , no VM_PRIVATE
+-	//
++	/*
++	 * VM_PFNMAP with only VM_SHARED, no VM_PRIVATE.
++	 * (RHEL 8.5 backported this check earlier than upstream)
++	 */
+ 	if( is_cow_mapping( vma->vm_flags ) ){
+ 		pdev_dbg(vedev->pdev,"COW with VM_PFNMAP  vm_flags=0x%lx\n",vma->vm_flags );
+ 		return -EINVAL;
+ 	}
+-#endif
+ 	/* check range */
+ 	offset = vma->vm_pgoff << PAGE_SHIFT;
+ 	size = vma->vm_end - vma->vm_start;
+@@ -266,6 +265,13 @@
+ 	return -1;
+ }
+ 
++#if defined(RHEL_RELEASE_CODE)
++/* RHEL 8.2 got vmf_insert_pfn() before upstream 4.17 */
++#define VE_HAVE_VMF_INSERT_PFN (RHEL_RELEASE_VERSION(8, 2) <= RHEL_RELEASE_CODE)
++#else
++#define VE_HAVE_VMF_INSERT_PFN (KERNEL_VERSION(4, 17, 0) <= LINUX_VERSION_CODE)
++#endif
++
+ /**
+  * @brief fault method of vm operation for VE
+  *        (Page fault handler)
+@@ -288,7 +294,7 @@
+ static vm_fault_t ve_vm_fault(struct vm_fault *vmf)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+-#if (RHEL_RELEASE_VERSION(8,2) <= RHEL_RELEASE_CODE)
++#if VE_HAVE_VMF_INSERT_PFN
+ 	vm_fault_t fault_reason;
+ #endif
+ #endif
+@@ -336,7 +342,7 @@
+ 	vaddr_start = ((unsigned long)vmf->address) & PAGE_MASK;
+ #endif
+ 
+-#if (RHEL_RELEASE_VERSION(8,2) > RHEL_RELEASE_CODE)
++#if !VE_HAVE_VMF_INSERT_PFN
+ 	pdev_dbg(vedev->pdev, "vm_insert_pfn (va=%p, pfn=%lu)\n",
+ 			(void *)vaddr_start, pfn);
+ 	err = vm_insert_pfn(vma, vaddr_start, pfn);
