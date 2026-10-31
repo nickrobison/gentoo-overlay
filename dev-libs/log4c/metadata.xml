@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<longdescription lang="en">
+		VEOS fork of the log4c logging library. Ships the shared log4c
+		runtime and the velayout-backed appenders used by veos and the
+		AUC tool chain.
+	</longdescription>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<upstream>
+		<remote-id type="github">veos-sxarr-NEC/log4c</remote-id>
+	</upstream>
+</pkgmetadata>

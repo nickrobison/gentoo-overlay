@@ -1,0 +1,14 @@
+BDEPEND=>=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=compile configure install prepare unpack
+DEPEND=sys-devel/binutils-ve dev-libs/gmp dev-libs/mpfr dev-libs/mpc sys-devel/bison sys-devel/flex
+DESCRIPTION=GCC 7.1.0 for the SX-Aurora TSUBASA Vector Engine, built from source
+EAPI=8
+HOMEPAGE=https://github.com/veos-sxarr-NEC/gcc-ve
+INHERIT=git-r3
+LICENSE=GPL-3
+PROPERTIES=live
+RDEPEND=sys-devel/binutils-ve
+RESTRICT=strip test
+SLOT=0
+_eclasses_=git-r3	e6c2f983e006e805160436c75a0c1562
+_md5_=365b57ea55af4bdc22ac0341464193d6

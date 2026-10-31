@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<longdescription lang="en">
+		VE-aware fork of musl libc, used as the C library for Vector
+		Engine user-space binaries.
+	</longdescription>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<upstream>
+		<remote-id type="github">veos-sxarr-NEC/musl-libc-ve</remote-id>
+	</upstream>
+</pkgmetadata>

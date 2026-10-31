@@ -1,0 +1,16 @@
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -6,9 +6,11 @@
+ libveaccio_la_SOURCES = accelerated_io.c
+ libsysve_la_SOURCES =	libvhcall.c libveshm.c libsysve.c libvecr.c \
+ 			libvhshm.c libuserdma.c
+-libveio_la_LDFLAGS = -version-info 1:0:0 -Wl,--build-id=sha1 -lpthread -lsysve
++libveio_la_LDFLAGS = -version-info 1:0:0 -Wl,--build-id=sha1 -lpthread
++libveio_la_LIBADD = libsysve.la
+ libveio_la_CFLAGS = -I$(top_srcdir)/include -I@LIBC_INC@/include
+-libveaccio_la_LDFLAGS = -version-info 1:0:0 -Wl,--build-id=sha1 -lpthread -lveio -sysve
++libveaccio_la_LDFLAGS = -version-info 1:0:0 -Wl,--build-id=sha1 -lpthread
++libveaccio_la_LIBADD = libveio.la
+ libveaccio_la_CFLAGS = -I$(top_srcdir)/include -I@LIBC_INC@/include
+ else
+ lib_LTLIBRARIES = libsysve.la

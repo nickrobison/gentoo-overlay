@@ -1,0 +1,13 @@
+BDEPEND=|| ( app-arch/rpm2targz >=app-arch/rpm-4.19.0[zstd(+)] )
+DEFINED_PHASES=install unpack
+DESCRIPTION=Static libgcc for the SX-Aurora TSUBASA Vector Engine (VE1)
+EAPI=8
+HOMEPAGE=https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el10.0/veos/3.6.0/
+INHERIT=rpm
+KEYWORDS=~amd64
+LICENSE=GPL-3
+RESTRICT=strip
+SLOT=0
+SRC_URI=https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el10.0/veos/3.6.0/x86_64/libgcc-ve1-static-7.1.0-10.el10.x86_64.rpm
+_eclasses_=eapi9-pipestatus	d2c134036ac31c3085aebc9147f572bd	estack	c61c368a76fdf3a82fdf8dbaebea3804	toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	rpm	716d8645cb3f94e78951eda6c33e0546
+_md5_=38605e72bfb171eb141fc491b65d6bff

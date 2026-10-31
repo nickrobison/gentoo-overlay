@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		MMM (Monitoring and Maintenance Manager) is NEC's proprietary
+		host-side management agent for SX-Aurora TSUBASA Vector Engine
+		cards. This package installs the vecmd command, used to query
+		card status (vecmd state get) and hardware information (vecmd
+		info), together with the ve_monitor daemon it queries. Card
+		management requires MMM firmware on the VE and a valid MMM
+		license.
+
+		Built from the RHEL 8 vendor package rather than the RHEL 10
+		one: the EL10 binaries carry GNU_PROPERTY_X86_ISA_1_NEEDED for
+		x86-64-v3 and are refused by the loader on pre-AVX2 CPUs, while
+		the EL8 build has no ISA requirement. It therefore links against
+		libcrypto.so.1.1 (dev-libs/openssl-compat:1.1) instead of
+		libcrypto.so.3.
+	</longdescription>
+</pkgmetadata>

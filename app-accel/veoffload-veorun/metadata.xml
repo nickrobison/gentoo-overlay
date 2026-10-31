@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<longdescription lang="en">
+		VE-side helper for the VEO (veoffload) framework: the runtime
+		loaded onto the Vector Engine by libveo/veos.
+	</longdescription>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<upstream>
+		<remote-id type="github">veos-sxarr-NEC/veoffload-veorun</remote-id>
+	</upstream>
+</pkgmetadata>
