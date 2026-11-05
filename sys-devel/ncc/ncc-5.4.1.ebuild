@@ -19,7 +19,9 @@ sys-devel/aurlic
 RDEPEND="${DEPEND} sys-devel/ncc-shared"
 
 VE_PREFIX="/opt/nec/ve"
+RESTRICT="strip"
 QA_PREBUILT="${VE_PREFIX}/*"
+QA_TEXTRELS="opt/nec/ve/*"
 
 src_unpack() {
 	default
@@ -27,10 +29,10 @@ src_unpack() {
 }
 
 src_install() {
-	dodir "/opt/nec"
-	eval mv -i "${S}${VE_PREFIX}" "${D}/opt/nec" || die
+	dodir /opt/nec
+	mv -i "${S}${VE_PREFIX}" "${ED}/opt/nec" || die
 
-	dodir "/opt/nec/ve/libexec"
+	dodir /opt/nec/ve/libexec
 	dosym -r "${VE_PREFIX}/ncc/${PV}/libexec/ccom" "${VE_PREFIX}/libexec/ccom"
 	dosym -r "${VE_PREFIX}/bin/nc++-${PV}" "${VE_PREFIX}/bin/nc++"
 	dosym -r "${VE_PREFIX}/bin/ncc-${PV}" "${VE_PREFIX}/bin/ncc"

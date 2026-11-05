@@ -11,6 +11,7 @@ SRC_URI="
 "
 S="${WORKDIR}"
 
+LICENSE="all-rights-reserved"
 SLOT="0"
 # No KEYWORDS: overlay convention (see sys-libs/glibc-ve1) -- covered by
 # /etc/portage/package.accept_keywords/dev-libs (* **); keywording it

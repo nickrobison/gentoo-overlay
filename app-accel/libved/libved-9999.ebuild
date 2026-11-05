@@ -7,11 +7,12 @@ DESCRIPTION="VE Device Driver library"
 HOMEPAGE="https://github.com/veos-sxarr-NEC/libved"
 EGIT_REPO_URI="https://github.com/veos-sxarr-NEC/${PN}.git"
 
-LICENSE="GPL-2"
+LICENSE="LGPL-2.1"
 SLOT="0"
 
 DEPEND="app-accel/vp-kmod
-app-accel/ve_drv-kmod"
+	app-accel/ve_drv-kmod
+	virtual/libudev"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
@@ -33,4 +34,6 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${ED}" install
+
+	find "${ED}" -name '*.la' -delete || die
 }

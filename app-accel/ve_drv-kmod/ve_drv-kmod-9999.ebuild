@@ -4,7 +4,7 @@ EAPI=8
 inherit autotools git-r3 linux-mod-r1
 
 DESCRIPTION="NEC Aurora VE-DRV Kernel Module"
-HOMEPAGE="https://github.com/veos-sxarr-NEC/ve_dev-kmod"
+HOMEPAGE="https://github.com/veos-sxarr-NEC/ve_drv-kmod"
 EGIT_REPO_URI="https://github.com/veos-sxarr-NEC/ve_drv-kmod.git"
 
 LICENSE="GPL-2"

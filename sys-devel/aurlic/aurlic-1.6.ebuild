@@ -22,10 +22,9 @@ src_unpack() {
 }
 
 src_install() {
-
-	insinto "${DE}/usr/lib64"
+	insinto /usr/lib64
 	doins "${WORKDIR}/usr/lib64/"*
 
-	dodir "/opt/nec"
-	eval mv -i "${S}${VE_PREFIX}" "${D}/opt/nec" || die
+	dodir /opt/nec
+	mv -i "${S}${VE_PREFIX}" "${ED}/opt/nec" || die
 }
