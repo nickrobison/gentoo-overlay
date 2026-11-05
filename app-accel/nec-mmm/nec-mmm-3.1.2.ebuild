@@ -38,7 +38,7 @@ QA_PREBUILT="
 	${VE_PREFIX}/sbin/ve-off
 	/opt/nec/ve3/mmm/sbin/ve_detect
 	/opt/nec/ve3/mmm/sbin/ib_detect
-	usr/lib64/libsignature.so
+	${VE_PREFIX}/mmm/lib64/libsignature.so
 "
 
 src_install() {
@@ -79,7 +79,10 @@ src_install() {
 	exeinto "${VE_PREFIX}/mmm/pci"
 	doexe "${src}"/mmm/pci/*.sh
 
-	exeinto /usr/lib64
+	# canonical payload path: both the shipped mmm-x86_64.conf and
+	# ve_monitor.env's LD_LIBRARY_PATH point at ${VE_PREFIX}/mmm/lib64
+	# (the RPM never had it under /usr/lib64)
+	exeinto "${VE_PREFIX}/mmm/lib64"
 	doexe "${src}"/mmm/lib64/libsignature.so
 
 	insinto /etc/opt/nec/ve
@@ -103,9 +106,25 @@ src_install() {
 
 	systemd_dounit "${WORKDIR}"/usr/lib/systemd/system/{mmm,reconnect_ve@,setpci_ve@,setpci_ib@,setpci_vfio@,ve-power,nec-ve-fan-ctl,nec-ve-fan-ctl-mon}.service
 
-	keepdir /var/opt/nec/ve/mmm
+	# Runtime state the launcher/vecmd/monitor all stat or write: the
+	# real monitor logs into log/ and td/ (the upstream %post hands them
+	# to veadmin), VE1 vecmd picks its daemon up from
+	# /var/opt/nec/ve/mmm/<slot>/ve_monitor.pid + .udev_socket<n>, and
+	# the shipped ve3 helpers use the ve3 twins. Without the tree vecmd
+	# reports that it cannot find ve_monitor.
+	keepdir /var/opt/nec/ve/mmm/{fan-ctl,log,td}
+	keepdir /var/opt/nec/ve3/mmm/{.tmp,log/info,td}
 }
 
+# Deliberately NOT mirrored from the upstream RPM %post:
+# - groupadd veadmin + root:veadmin 770 on {log,td}: groupadd is banned
+#   in EAPI 8 (and an acct-group package would be a new package for a
+#   group only the vendor installer needs); the monitor runs as root
+#   from mmm.service, so plain root-owned dirs behave the same.
+# - systemctl enable/start mmm: Gentoo installs units disabled, see elog.
+# - ldconfig: portage runs it on merge (see app-accel/veos), and the
+#   path it must pick up (/opt/nec/ve/mmm/lib64) is in the shipped
+#   mmm-x86_64.conf.
 pkg_postinst() {
 	elog "MMM's ve_monitor daemon must be running for vecmd to query the card:"
 	elog "  systemctl enable --now mmm"
