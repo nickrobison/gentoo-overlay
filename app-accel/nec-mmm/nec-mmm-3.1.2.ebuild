@@ -20,6 +20,8 @@ KEYWORDS="~amd64"
 RESTRICT="bindist mirror strip userpriv"
 
 RDEPEND="
+	acct-group/veadmin
+	acct-user/veadmin
 	app-accel/libved
 	dev-libs/libyaml
 	dev-libs/openssl-compat:1.1.1
@@ -117,15 +119,19 @@ src_install() {
 }
 
 # Deliberately NOT mirrored from the upstream RPM %post:
-# - groupadd veadmin + root:veadmin 770 on {log,td}: groupadd is banned
-#   in EAPI 8 (and an acct-group package would be a new package for a
-#   group only the vendor installer needs); the monitor runs as root
-#   from mmm.service, so plain root-owned dirs behave the same.
 # - systemctl enable/start mmm: Gentoo installs units disabled, see elog.
 # - ldconfig: portage runs it on merge (see app-accel/veos), and the
 #   path it must pick up (/opt/nec/ve/mmm/lib64) is in the shipped
 #   mmm-x86_64.conf.
+# The group/user themselves come as deps instead of `groupadd -r
+# veadmin`, which pkgcheck flags as banned in EAPI 8.
 pkg_postinst() {
+	# Upstream %post: the log/ and td/ work dirs are group-shared with
+	# veadmin (770); the RDEPEND above guarantees the group exists.
+	chown root:veadmin "${EROOT}"/var/opt/nec/ve/mmm/{log,td} ||
+		ewarn "could not chown ${EROOT}/var/opt/nec/ve/mmm/{log,td}"
+	chmod 770 "${EROOT}"/var/opt/nec/ve/mmm/{log,td} ||
+		ewarn "could not chmod ${EROOT}/var/opt/nec/ve/mmm/{log,td}"
 	elog "MMM's ve_monitor daemon must be running for vecmd to query the card:"
 	elog "  systemctl enable --now mmm"
 	elog "Fan control on real cards:"
