@@ -16,7 +16,16 @@ KEYWORDS="~amd64"
 DEPEND="sys-devel/binutils-ve
 sys-devel/aurlic
 "
-RDEPEND="${DEPEND} sys-devel/ncc-shared"
+# ncc's driver hard-wires -lveproginf -lveperfcnt -lncc -lsysve into every
+# link (see `ncc -v`), so the packages owning those objects must come in
+# with the driver itself: without them nld reports
+#   /opt/nec/ve/bin/nld: cannot find -lveproginf
+#   /opt/nec/ve/bin/nld: cannot find -lveperfcnt
+#   /opt/nec/ve/bin/nld: cannot find -lsysve
+RDEPEND="${DEPEND}
+	sys-devel/ncc-shared
+	dev-libs/nec-veperf-ve1
+	dev-libs/libsysve"
 
 VE_PREFIX="/opt/nec/ve"
 RESTRICT="strip"
