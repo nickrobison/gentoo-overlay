@@ -2,7 +2,7 @@ EAPI=8
 
 RPM_COMPRESS_TYPE="xz"
 
-inherit rpm systemd
+inherit rpm systemd udev
 
 # mmm payload has root-locked config dirs: the rpm2targz cpio shim chokes on
 # them as the build user; force the tar-based rpm2archive path instead.
@@ -37,7 +37,7 @@ QA_PREBUILT="
 	${VE_PREFIX}/mmm/sbin/ve_init
 	${VE_PREFIX}/mmm/sbin/ve_monitor
 	${VE_PREFIX}/sbin/ve_monitor
-	${VE_PREFIX}/sbin/ve-off
+	${VE_PREFIX}/mmm/bin/ve-off
 	/opt/nec/ve3/mmm/sbin/ve_detect
 	/opt/nec/ve3/mmm/sbin/ib_detect
 	${VE_PREFIX}/mmm/lib64/libsignature.so
@@ -51,6 +51,7 @@ src_install() {
 
 	exeinto "${VE_PREFIX}/mmm/bin"
 	doexe "${src}"/mmm/bin/vecmd
+	doexe "${src}"/mmm/bin/ve-off
 
 	# PATH entry: /opt/nec/ve/bin is on PATH, and the VE1 vecmd is the
 	# only one usable here -- the payload's /opt/nec/ve3/mmm/bin/vecmd is
@@ -66,8 +67,10 @@ src_install() {
 	exeinto "${VE_PREFIX}/sbin"
 	doexe "${src}"/sbin/ve_monitor
 	doexe "${src}"/sbin/mmm-logrotate
-	# ve-power.service execs ve-off from here
-	doexe "${src}"/mmm/bin/ve-off
+	# ve-power.service execs ve-off from here; ve_monitor also stats
+	# ${VE_PREFIX}/mmm/bin/ve-off (installed above), so both paths need
+	# the real binary -- not a symlink loop.
+	dosym ../mmm/bin/ve-off "${VE_PREFIX}/sbin/ve-off"
 
 	fperms 0700 "${VE_PREFIX}/mmm/sbin/ve_monitor" "${VE_PREFIX}/sbin/ve_monitor"
 
@@ -102,9 +105,10 @@ src_install() {
 	insinto /etc/opt/nec/ve3
 	doins -r "${WORKDIR}"/etc/opt/nec/ve3/mmm
 
-	insinto /usr/lib/udev/rules.d
-	doins "${WORKDIR}"/usr/lib/udev/rules.d/96-reconnect-ve.rules \
+	udev_dorules "${WORKDIR}"/usr/lib/udev/rules.d/96-reconnect-ve.rules \
 		"${WORKDIR}"/usr/lib/udev/rules.d/96-ve-ib-pci.rules
+	# Compatibility symlink: driver creates /dev/ve0, monitor expects /dev/veslot0
+	udev_dorules "${FILESDIR}"/96-ve-veslot.rules
 
 	systemd_dounit "${WORKDIR}"/usr/lib/systemd/system/{mmm,reconnect_ve@,setpci_ve@,setpci_ib@,setpci_vfio@,ve-power,nec-ve-fan-ctl,nec-ve-fan-ctl-mon}.service
 
@@ -114,7 +118,12 @@ src_install() {
 	# /var/opt/nec/ve/mmm/<slot>/ve_monitor.pid + .udev_socket<n>, and
 	# the shipped ve3 helpers use the ve3 twins. Without the tree vecmd
 	# reports that it cannot find ve_monitor.
+	# The msl/throttling subtree is referenced by ve_monitor's
+	# Throttling_Level logic (%s/mmm/msl/throttling/... where
+	# %s=/var/opt/nec/ve); it's generated at runtime but keepdir the
+	# parents so the paths exist from the start.
 	keepdir /var/opt/nec/ve/mmm/{fan-ctl,log,td}
+	keepdir /var/opt/nec/ve/mmm/msl/{init,param,throttling}
 	keepdir /var/opt/nec/ve3/mmm/{.tmp,log/info,td}
 }
 
@@ -126,6 +135,7 @@ src_install() {
 # The group/user themselves come as deps instead of `groupadd -r
 # veadmin`, which pkgcheck flags as banned in EAPI 8.
 pkg_postinst() {
+	udev_reload
 	# Upstream %post: the log/ and td/ work dirs are group-shared with
 	# veadmin (770); the RDEPEND above guarantees the group exists.
 	chown root:veadmin "${EROOT}"/var/opt/nec/ve/mmm/{log,td} ||
