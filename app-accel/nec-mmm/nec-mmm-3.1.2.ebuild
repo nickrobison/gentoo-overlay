@@ -50,6 +50,13 @@ src_install() {
 	exeinto "${VE_PREFIX}/mmm/bin"
 	doexe "${src}"/mmm/bin/vecmd
 
+	# PATH entry: /opt/nec/ve/bin is on PATH, and the VE1 vecmd is the
+	# only one usable here -- the payload's /opt/nec/ve3/mmm/bin/vecmd is
+	# the Aurora3 build (hardcodes /opt/nec/ve3/{etc,var}/... state that
+	# this package does not ship). Point any vecmd lookup at the VE1
+	# binary instead of the ve3 one.
+	dosym ../mmm/bin/vecmd "${VE_PREFIX}/bin/vecmd"
+
 	exeinto "${VE_PREFIX}/mmm/sbin"
 	doexe "${src}"/mmm/sbin/ve_init
 	doexe "${src}"/mmm/sbin/ve_monitor
