@@ -150,3 +150,9 @@ pkg_postinst() {
 	elog "  ${VE_PREFIX}/mmm/bin/vecmd state get"
 	elog "  ${VE_PREFIX}/mmm/bin/vecmd info"
 }
+
+pkg_postrm() {
+	# Rules go away with the package; refresh udev so the veslot
+	# symlink and reconnect/setpci triggers stop firing.
+	udev_reload
+}
