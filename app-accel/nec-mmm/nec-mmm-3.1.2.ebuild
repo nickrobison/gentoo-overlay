@@ -23,6 +23,8 @@ RDEPEND="
 	acct-group/veadmin
 	acct-user/veadmin
 	app-accel/libved
+	app-accel/mmm-config
+	app-accel/mmm-msl
 	dev-libs/libyaml
 	dev-libs/openssl-compat:1.1.1
 	x11-libs/libpciaccess
@@ -118,12 +120,9 @@ src_install() {
 	# /var/opt/nec/ve/mmm/<slot>/ve_monitor.pid + .udev_socket<n>, and
 	# the shipped ve3 helpers use the ve3 twins. Without the tree vecmd
 	# reports that it cannot find ve_monitor.
-	# The msl/throttling subtree is referenced by ve_monitor's
-	# Throttling_Level logic (%s/mmm/msl/throttling/... where
-	# %s=/var/opt/nec/ve); it's generated at runtime but keepdir the
-	# parents so the paths exist from the start.
+	# (The /etc-side msl/throttling script tree is NOT keepdir material:
+	# it ships as real files from app-accel/mmm-msl.)
 	keepdir /var/opt/nec/ve/mmm/{fan-ctl,log,td}
-	keepdir /var/opt/nec/ve/mmm/msl/{init,param,throttling}
 	keepdir /var/opt/nec/ve3/mmm/{.tmp,log/info,td}
 }
 
