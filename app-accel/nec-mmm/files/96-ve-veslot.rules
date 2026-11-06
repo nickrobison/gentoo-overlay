@@ -1,0 +1,4 @@
+# The VE driver exposes /dev/ve0, but ve_monitor and vecmd look for
+# /dev/veslotN (legacy naming from the vendor's older driver). Create
+# the compatibility symlink.
+SUBSYSTEM=="ve", KERNEL=="ve[0-9]*", SYMLINK+="veslot%n"

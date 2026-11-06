@@ -4,14 +4,15 @@ EAPI=8
 inherit autotools git-r3 linux-mod-r1
 
 DESCRIPTION="NEC Aurora VE-DRV Kernel Module"
-HOMEPAGE="https://github.com/veos-sxarr-NEC/ve_dev-kmod"
+HOMEPAGE="https://github.com/veos-sxarr-NEC/ve_drv-kmod"
 EGIT_REPO_URI="https://github.com/veos-sxarr-NEC/ve_drv-kmod.git"
 
 LICENSE="GPL-2"
 SLOT="0"
 
 DEPEND="app-accel/vp-kmod"
-RDEPEND="${DEPEND}"
+# The driver request_firmware()s the SBus/SerDes images at card init.
+RDEPEND="${DEPEND} sys-firmware/ve-firmware"
 
 VE_PREFIX="/opt/nec/ve/veos"
 

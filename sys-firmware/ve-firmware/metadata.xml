@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		Firmware images for the NEC SX-Aurora TSUBASA Vector Engine card:
+		SBus master and SerDes ROMs loaded by the ve_drv kernel module
+		(request_firmware fw_ve_sbus_00.bin / fw_ve_sdes_00.bin, also
+		installed under their raw ROM names).
+	</longdescription>
+</pkgmetadata>

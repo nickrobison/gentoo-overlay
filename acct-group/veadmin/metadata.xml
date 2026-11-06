@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		Group for the veadmin account used by NEC's SX-Aurora MMM
+		(Monitoring and Maintenance Manager). The vendor package
+		creates it in its %pre and chowns /var/opt/nec/ve/mmm/log
+		and /var/opt/nec/ve/mmm/td to root:veadmin (mode 770).
+	</longdescription>
+</pkgmetadata>
