@@ -27,6 +27,7 @@ RDEPEND="
 	app-accel/mmm-msl
 	dev-libs/libyaml
 	dev-libs/openssl-compat:1.1.1
+	sys-firmware/vmcfw
 	x11-libs/libpciaccess
 	virtual/libudev
 	virtual/zlib

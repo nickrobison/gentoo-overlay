@@ -11,7 +11,8 @@ LICENSE="GPL-2"
 SLOT="0"
 
 DEPEND="app-accel/vp-kmod"
-RDEPEND="${DEPEND}"
+# The driver request_firmware()s the SBus/SerDes images at card init.
+RDEPEND="${DEPEND} sys-firmware/ve-firmware"
 
 VE_PREFIX="/opt/nec/ve/veos"
 
