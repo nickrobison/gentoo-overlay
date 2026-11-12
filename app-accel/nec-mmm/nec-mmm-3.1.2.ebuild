@@ -25,6 +25,7 @@ RDEPEND="
 	app-accel/libved
 	app-accel/mmm-config
 	app-accel/mmm-msl
+	dev-libs/jemalloc
 	dev-libs/libyaml
 	dev-libs/openssl-compat:1.1.1
 	sys-firmware/vmcfw
@@ -115,6 +116,14 @@ src_install() {
 
 	systemd_dounit "${WORKDIR}"/usr/lib/systemd/system/{mmm,reconnect_ve@,setpci_ve@,setpci_ib@,setpci_vfio@,ve-power,nec-ve-fan-ctl,nec-ve-fan-ctl-mon}.service
 
+	# The el8-era ve_monitor corrupts the heap during VE0 1st Init on
+	# modern glibc (fclose trips over smashed chunk metadata; the same
+	# binary is fine on RHEL 8). Interpose jemalloc so the daemon
+	# survives -- without it vecmd can never talk to it (issues #6/#8
+	# stay broken at runtime).
+	insinto /usr/lib/systemd/system/mmm.service.d
+	newins "${FILESDIR}"/10-allocator.conf 10-allocator.conf
+
 	# Runtime state the launcher/vecmd/monitor all stat or write: the
 	# real monitor logs into log/ and td/ (the upstream %post hands them
 	# to veadmin), VE1 vecmd picks its daemon up from
@@ -144,6 +153,9 @@ pkg_postinst() {
 		ewarn "could not chmod ${EROOT}/var/opt/nec/ve/mmm/{log,td}"
 	elog "MMM's ve_monitor daemon must be running for vecmd to query the card:"
 	elog "  systemctl enable --now mmm"
+	elog "A systemd drop-in LD_PRELOADs jemalloc for ve_monitor (heap-corruption"
+	elog "workaround for the el8 binary on modern glibc); see"
+	elog "  /usr/lib/systemd/system/mmm.service.d/10-allocator.conf"
 	elog "Fan control on real cards:"
 	elog "  systemctl enable --now nec-ve-fan-ctl nec-ve-fan-ctl-mon"
 	elog "Card (re)connect and setpci helpers trigger via the installed udev rules."
