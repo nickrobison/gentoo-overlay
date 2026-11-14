@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		NEC's FT (fault-test) monitor for the SX-Aurora TSUBASA MMM stack:
+		the ftmon engine plus the boot-error detection catalog
+		(/var/opt/nec/ve/td/ft/catalog) and the FTs/*.nec test script
+		tree. ve_monitor executes ftmon after Init 2 to decide whether the
+		card booted cleanly; without it the daemon logs "FT File Open
+		Failed" and latches the card UNAVAILABLE.
+
+		Split out of the vendor's mmm RPM family exactly as upstream
+		ships it (ftmon is a separate RPM from mmm).
+	</longdescription>
+</pkgmetadata>
