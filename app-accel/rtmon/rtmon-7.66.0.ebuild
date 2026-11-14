@@ -7,7 +7,7 @@ inherit rpm
 # The payload ships root-locked dirs (0770 var tree, setuid 4750 td/rt
 # dir): the rpm2targz cpio shim chokes on them as the build user; force
 # the tar-based rpm2archive path (same workaround as app-accel/nec-mmm).
-BDEPEND=">=app-arch/rpm-4.19.0[lzma(+)]"
+BDEPEND="dev-util/patchelf >=app-arch/rpm-4.19.0[lzma(+)]"
 
 DESCRIPTION="NEC Vector Engine runtime-test (RT) monitor and catalog"
 HOMEPAGE="https://sxauroratsubasa.sakura.ne.jp/repos/TSUBASA-repo_el8.10/mmm/"
@@ -46,6 +46,15 @@ src_install() {
 
 	exeinto "${VE_PREFIX}/td/rt"
 	doexe "${src}"/rtmon
+
+	# Upstream embeds a DT_RPATH whose first component is a relative
+	# build-machine path ('../AUSIM/lib/RHEL8', an NEC simulation tree
+	# that ships nowhere in the payload) -- scanelf flags the relative
+	# component as an rpath security problem. Rewrite it keeping only
+	# the two absolute fallbacks, preserving upstream's DT_RPATH type.
+	patchelf --force-rpath \
+		--set-rpath '/opt/nec/ve/veos/lib64:/opt/nec/ve/mmm/lib64' \
+		"${ED}${VE_PREFIX}/td/rt/rtmon"
 
 	insinto /etc/logrotate.d
 	doins "${WORKDIR}"/etc/logrotate.d/rt

@@ -1,4 +1,4 @@
-BDEPEND=>=app-arch/rpm-4.19.0[lzma(+)] || ( app-arch/rpm2targz >=app-arch/rpm-4.19.0[lzma(+)] ) virtual/pkgconfig virtual/pkgconfig
+BDEPEND=dev-util/patchelf >=app-arch/rpm-4.19.0[lzma(+)] || ( app-arch/rpm2targz >=app-arch/rpm-4.19.0[lzma(+)] ) virtual/pkgconfig virtual/pkgconfig
 DEFINED_PHASES=install postinst unpack
 DESCRIPTION=NEC Vector Engine runtime-test (RT) monitor and catalog
 EAPI=8
