@@ -21,6 +21,11 @@ PATCHES=(
 	"${FILESDIR}"/0002-main-c-const-dev_uevent-and-file-local-helpers.patch
 	"${FILESDIR}"/0003-mmap-c-upstream-kernel-compat-instead-of-RHEL-macros.patch
 	"${FILESDIR}"/0004-kmod-make-file-local-helpers-static-GCC16.patch
+	# After the Gen3 FW update the VE1 self-restarts its PCIe interface;
+	# upstream checks VendorID once a couple of seconds later and SBRs
+	# to Gen1 on failure. Cards that take longer to reappear get
+	# stranded at Gen1 -- poll instead (uses wait_after_vereset_sec).
+	"${FILESDIR}"/0005-main-c-poll-pci-link-after-fw-update-restart.patch
 )
 
 src_prepare() {
