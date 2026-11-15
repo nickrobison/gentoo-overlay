@@ -1,0 +1,30 @@
+--- a/src/main.c
++++ b/src/main.c
+@@ -1005,7 +1005,25 @@ int ve_recover_from_link_down(struct ve_dev *vedev, u16 *aer_cap,
+ 	err = ve_check_pci_link(pdev);
+ 	if (err) {
+-		pdev_err(pdev, "PCI link is not recovered\n");
+-		return -1;
++		/*
++		 * After loading the PCIe (Gen3) firmware the VE1 chip
++		 * self-restarts its PCIe interface; depending on the card
++		 * this can take longer than a single VendorID check allows
++		 * for, and reporting the link dead here sends the driver
++		 * down the SBR fallback path, leaving the card at Gen1.
++		 * Poll for the card to come back, but only on the
++		 * firmware-update path -- the chip-reset and link-down
++		 * recovery paths expect a promptly available device.
++		 */
++		int poll = (fw_update && !sbr) ? wait_after_vereset_sec : 0;
++
++		while (err && poll-- > 0) {
++			ssleep(1);
++			err = ve_check_pci_link(pdev);
++		}
++		if (err) {
++			pdev_err(pdev, "PCI link is not recovered\n");
++			return -1;
++		}
+ 	}
+ 
+ 	/*

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		Account matching the veadmin group used by NEC's SX-Aurora
+		MMM (Monitoring and Maintenance Manager). The vendor package
+		creates only the group; this user is the matching principal
+		for the state tree it owns (system account, nologin).
+	</longdescription>
+</pkgmetadata>

@@ -9,11 +9,6 @@ EGIT_REPO_URI="https://github.com/veos-sxarr-NEC/vp-kmod.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
-
-DEPEND=""
-RDEPEND="${DEPEND}"
-BDEPEND=""
 
 VE_PREFIX="/opt/nec/ve/veos"
 

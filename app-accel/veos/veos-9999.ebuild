@@ -54,8 +54,10 @@ RDEPEND="${DEPEND}
 # protoc generates veos_RPM.pb-c.{c,h} at configure time
 # (AC_CONFIG_COMMANDS) and python ived_pb2.py at build time;
 # protoc-c itself ships with dev-libs/protobuf-c (in DEPEND).
-BDEPEND+="dev-libs/protobuf
-	${PYTHON_DEPS}"
+BDEPEND+="
+	dev-libs/protobuf
+	${PYTHON_DEPS}
+"
 
 # --libdir intentionally NOT /usr/lib64: spec %configure pins
 # --libdir=/opt/nec/ve/veos/lib64, matching the ld.so.conf.d/veos.conf

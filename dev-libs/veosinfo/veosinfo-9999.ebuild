@@ -21,7 +21,9 @@ DEPEND="app-accel/velayout
 	dev-libs/protobuf-c
 	virtual/libudev"
 RDEPEND="${DEPEND}"
-BDEPEND+="dev-libs/protobuf-c"
+BDEPEND+="
+	dev-libs/protobuf-c
+"
 
 src_prepare() {
 	default

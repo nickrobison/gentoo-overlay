@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		VMC (VE Management Controller) firmware image for the NEC
+		SX-Aurora TSUBASA Vector Engine. ve_monitor flashes it to the
+		card during MMM initialization ("VE0 1st Init"); the MMM-Daemon
+		aborts if the image is missing.
+	</longdescription>
+</pkgmetadata>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		NEC's RT (runtime-test) monitor for the SX-Aurora TSUBASA MMM
+		stack: the rtmon engine plus the runtime test catalog
+		(cata_default), RT.par parameters and the per-slot interrupt
+		seeds under /var/opt/nec/ve/td/rt/. ve_monitor executes rtmon per
+		the mmm .config td_rt_exec setting.
+
+		Split out of the vendor's mmm RPM family exactly as upstream
+		ships it (rtmon is a separate RPM from mmm).
+	</longdescription>
+</pkgmetadata>

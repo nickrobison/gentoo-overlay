@@ -25,6 +25,24 @@ RESTRICT="strip"
 QA_PREBUILT="${VE_PREFIX}/*"
 QA_TEXTRELS="opt/nec/ve/*"
 
+# Expected install-phase ERROR (not a failure, and not fixable from the
+# ebuild): "Error! Installing dynamic libraries (.so) with blank
+# PROVIDES!" -- doebuild.py only writes build-info/PROVIDES from
+# NEEDED.ELF.2 entries, and each entry needs
+# portage.dep.soname.multilib_category.compute_multilib_category() to
+# return a prefix. That function maps ELF e_machine values onto lib
+# dir prefixes in _machine_prefix_map, which has no entry for EM_VE
+# (251, "NEC Vector Engine"), so every VE object yields no category:
+# PROVIDES ends up empty and portage's ingestion check
+# (check_dyn_libs_inconsistent, util/_dyn_libs/dyn_libs.py) reports the
+# blank result whenever the image contains a *.so resolving to a regular
+# file -- which libc.so.6 always is. Note the eerror is the *only* thing
+# that shows for these objects: the paired "Unrecognized ELF file(s)"
+# QA notice is suppressed because QA_PREBUILT covers ${VE_PREFIX}/*, and
+# for the same reason nothing else in portage tries to interpret the VE
+# objects. Until portage learns about EM_VE there is no ebuild-side
+# switch; the install still succeeds (eerror does not abort the phase).
+
 # Toolchain for the build (mirrors NEC's glibc.spec: CC=gcc-ve).
 # veos: elf/dl-open.c includes <sysve.h>/<veos_defs.h> under __ve__.
 # Those headers are authored in veos's include/ and installed by veos to

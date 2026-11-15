@@ -7,13 +7,11 @@ DESCRIPTION="log4c layout library for veos"
 HOMEPAGE="https://github.com/veos-sxarr-nec/velayout"
 EGIT_REPO_URI="https://github.com/veos-sxarr-nec/velayout.git"
 
-LICENSE="GPL-2"
+LICENSE="LGPL-2.1"
 SLOT="0"
 
 DEPEND="dev-libs/log4c"
 RDEPEND="${DEPEND}"
-
-VE_PREFIX="/opt/nec/ve/veos"
 
 src_prepare() {
 	default
@@ -30,4 +28,6 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${ED}" install
+
+	find "${ED}" -name '*.la' -delete || die
 }

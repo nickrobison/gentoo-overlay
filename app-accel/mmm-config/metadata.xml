@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		NEC's configuration payload for the SX-Aurora TSUBASA MMM
+		stack: ve_hw_spec.yaml (per-sensor sysfs map ve_monitor loads
+		at daemon start -- missing it logs "MMM Yaml file change
+		error"), per-board ve_nodes JSON files, analysis tables and the
+		mmm-config-json.sh helper that picks the right ve_nodes.json
+		for the host at install time.
+
+		Split out of the vendor's mmm RPM family exactly as upstream
+		ships it (mmm-config is a separate RPM from mmm).
+	</longdescription>
+</pkgmetadata>

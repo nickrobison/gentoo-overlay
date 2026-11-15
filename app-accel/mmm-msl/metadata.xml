@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>nick@nickrobison.com</email>
+		<name>Nick Robison</name>
+	</maintainer>
+	<longdescription lang="en">
+		NEC's MSL (MMM Script Language) payload for the SX-Aurora TSUBASA
+		MMM daemon: NEC-signed .nec script files under
+		/etc/opt/nec/ve/mmm/msl/ (initialization, throttling, DMA tables,
+		error-log decoding, sensor diagnostics). ve_monitor refuses to
+		start its MMM-Daemon without them ("can not access mmm-config")
+		and aborts if a script fails NEC signature verification.
+
+		Split out of the vendor's mmm RPM family exactly as upstream
+		ships it (mmm-msl is a separate RPM from mmm).
+	</longdescription>
+</pkgmetadata>
